@@ -42,8 +42,7 @@ async fn main() {
 }
 
 async fn _main() -> anyhow::Result<()> {
-    let _telemetry_guard =
-        spin_telemetry::init(VERSION.to_string()).context("Failed to initialize telemetry")?;
+    spin_telemetry::init(VERSION.to_string()).context("Failed to initialize telemetry")?;
 
     let plugin_help_entries = plugin_help_entries();
 

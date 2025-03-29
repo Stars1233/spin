@@ -37,14 +37,14 @@ pub type ValidatorFn = dyn Fn(&App, &[&str]) -> anyhow::Result<()>;
 /// An `App` holds loaded configuration for a Spin application.
 #[derive(Debug, Clone)]
 pub struct App {
-    id: String,
+    id: Arc<str>,
     locked: Arc<LockedApp>,
 }
 
 impl App {
     /// Returns a new app for the given runtime-specific identifier and locked
     /// app.
-    pub fn new(id: impl Into<String>, locked: LockedApp) -> Self {
+    pub fn new(id: impl Into<Arc<str>>, locked: LockedApp) -> Self {
         Self {
             id: id.into(),
             locked: Arc::new(locked),
@@ -54,6 +54,11 @@ impl App {
     /// Returns a runtime-specific identifier for this app.
     pub fn id(&self) -> &str {
         &self.id
+    }
+
+    /// Returns a runtime-specific identifier for this app.
+    pub fn id_shared(&self) -> Arc<str> {
+        self.id.clone()
     }
 
     /// Deserializes typed metadata for this app.

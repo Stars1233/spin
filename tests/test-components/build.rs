@@ -41,7 +41,12 @@ fn main() {
             .arg("build")
             .arg("--target=wasm32-wasip1")
             .env("RUSTFLAGS", rustflags())
-            .env("CARGO_TARGET_DIR", &out_dir);
+            .env("CARGO_TARGET_DIR", &out_dir)
+            // If RUSTFLAGS was set it'll be passed to this build script through
+            // this variable but since we're cross-compiling to wasm we almost
+            // surely don't want this to get picked up, so remove this from the
+            // destination flags.
+            .env_remove("CARGO_ENCODED_RUSTFLAGS");
         eprintln!("running: {cargo:?}");
         let status = cargo.status().expect("`cargo build` failed");
         assert!(status.success(), "{status:?}");
